@@ -12,11 +12,10 @@ deterministic generator I'll be clear to specify that. Otherwise I'm referring
 to the deterministic one.
 
 
-|||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||
-_________
-|       |
-[ SETUP ] Initializing the algorithm
-|       |
+___
+
+[ SETUP ]
+    Initializing the algorithm
 
 01) The algorithm requires a 16 to 64-character password (128 to 512 bits)
 
@@ -28,10 +27,10 @@ _________
 04) A 256-char, randomly sorted array is created to function as a substitution
     box.
 
-___________
-|         |
-[ LOADING ] Loading the algorithm with data and setting up
-|         |
+
+
+[ LOADING ]
+    Loading the algorithm with data and setting up
 
 01) User adds entropy to the nondeterministic RNG (not yet implemented).
 
@@ -64,10 +63,10 @@ ___________
 06) The two old blocks (with the clear data) are discarded and the three new
     ones are XOR padded with a random byte stream.
 
-___________
-|         |
-[ PROCESS ] Encryption of the 3 blocks (this process is repeated 8 times)
-|         |
+
+
+[ PROCESS ]
+    Encryption of the 3 blocks (this process is repeated 8 times)
 
 01) Each byte in the boxes is replaced using the substitution box.
 
@@ -76,26 +75,26 @@ ___________
     this:
 
       Box 1         Box 2         Box 3
-      --+--         --+--         --+--
+      --+--         --+--         --+--     Or:
         |             |             |
-        +----hash->---------xor---->|
+        +----hash->---------xor---->|       B3 ^= hash(B1);
         |             |             |
-        |<-xor<-hash--+             |
+        |<-xor<-hash--+             |       B1 ^= hash(B2);
         |             |             |
-        +--hash->xor->|             |
+        +--hash->xor->|             |       B2 ^= hash(B1);
         |             |             |
-        |             |<-xor<-hash--+
+        |             |<-xor<-hash--+       B2 ^= hash(B3);
         |             |             |
-        |             +--hash->xor->|
+        |             +--hash->xor->|       B3 ^= hash(B2);
         |             |             |
-        |<-----xor-------<---hash---+
+        |<-----xor-------<---hash---+       B1 ^= hash(B3);
         |             |             |
       --+--         --+--         --+--
       Box A         Box B         Box C
 
       Or:
-          B3 ^= hash(B1); B1 ^= hash(B2); B2 ^= hash(B1);
-          B2 ^= hash(B3); B3 ^= hash(B2); B1 ^= hash(B3);
+          
+            
 
 03) The byte from a random slot in the first block is placed into a random
     slot in the second block. The byte that was is that slot is moved to a
@@ -106,8 +105,7 @@ ___________
 04) One block is randomly selected to be XORed by the entire key ( a block is
     16 bytes and the key is 64 bytes: 4 pads).
 
-|||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||   |||||
-
+___
 
 THOUGHTS
 
